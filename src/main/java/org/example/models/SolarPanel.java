@@ -5,18 +5,18 @@ import org.example.interfaces.Sensors;
 
 public class SolarPanel implements Sensors {
 
-    private double energy;
+    private float energy;
 
-    public SolarPanel(double energy){
+    public SolarPanel(float energy){
         this.energy = energy;
     }
 
-    public void setEnergy(double energy) {
+    public void setEnergy(float energy) {
         this.energy = energy;
     }
 
     @Override
     public float readValue() {
-        return 0;
+        return energy;
     }
 }

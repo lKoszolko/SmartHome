@@ -11,26 +11,30 @@ public class Heating implements ObslugaFunkcjonalnosciDomu {
     private float temperature;
     List<Observer> observers = new ArrayList<>();
 
-    public Heating(float temperature){
-        this.temperature = temperature;
-    }
-
     public void setTemperature(float temperature) {
         this.temperature = temperature;
     }
 
     @Override
     public void turnOn() {
-
+        if (!isActive) isActive = true;
     }
 
     @Override
     public void turnOff() {
-
+        if (isActive) isActive = false;
     }
 
     @Override
     public boolean checkStatus() {
-        return false;
+        return isActive;
+    }
+
+    @Override
+    public String toString() {
+        return "Heating{" +
+                "isActive=" + isActive +
+                ", temperature=" + temperature +
+                '}';
     }
 }
