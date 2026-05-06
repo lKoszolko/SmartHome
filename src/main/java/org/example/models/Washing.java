@@ -4,6 +4,10 @@ package org.example.models;
 import org.example.interfaces.ObslugaFunkcjonalnosciDomu;
 
 public class Washing implements ObslugaFunkcjonalnosciDomu {
+
+
+
+
     @Override
     public void turnOn() {
 
