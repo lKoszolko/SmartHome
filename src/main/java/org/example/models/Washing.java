@@ -4,7 +4,6 @@ package org.example.models;
 import org.example.interfaces.ObslugaFunkcjonalnosciDomu;
 
 public class Washing implements ObslugaFunkcjonalnosciDomu {
-
     boolean isActive = false;
     boolean isFinished;
 

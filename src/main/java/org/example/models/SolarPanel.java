@@ -5,7 +5,7 @@ import org.example.interfaces.Sensors;
 
 public class SolarPanel implements Sensors {
 
-    private float energy;
+    private float energy = 0;
 
     public SolarPanel(float energy){
         this.energy = energy;

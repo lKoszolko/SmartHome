@@ -1,4 +1,4 @@
-package org.example;
+package org.example.managers;
 
 import org.example.interfaces.Observer;
 import org.example.interfaces.ObslugaFunkcjonalnosciDomu;
@@ -8,21 +8,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AiAssistant implements Observer {
-    private static List<ObslugaFunkcjonalnosciDomu> devices = new ArrayList<>();
+    private List<ObslugaFunkcjonalnosciDomu> devices = new ArrayList<>();
     private List<Sensors> sensors = new ArrayList<>();
     private String currentMode;
-    private SmartHomeManager manager = new SmartHomeManager();
+//    private SmartHomeManager manager = new SmartHomeManager();
 
     public AiAssistant(List<ObslugaFunkcjonalnosciDomu> devices){
-        AiAssistant.devices = devices;
+        this.devices = devices;
+    }
+    public AiAssistant(){
+
+    }
+    public List<ObslugaFunkcjonalnosciDomu> getDevices(){
+        return devices;
     }
 
     @Override
     public void reagujNaZdarzenie(String source, String eventType) {
-
     }
 
-    public static void addDevice(ObslugaFunkcjonalnosciDomu device){
+    public void addDevice(ObslugaFunkcjonalnosciDomu device){
         devices.add(device);
     }
 
@@ -30,10 +35,11 @@ public class AiAssistant implements Observer {
         o.turnOff();
     }
 
+    public void turnOnDevice(ObslugaFunkcjonalnosciDomu o){
+        o.turnOn();
+    }
+
     public void printActiveDevices(List<ObslugaFunkcjonalnosciDomu> list){
         list.stream().filter(ObslugaFunkcjonalnosciDomu::checkStatus).forEach(System.out::println);
     }
-
-
-
 }

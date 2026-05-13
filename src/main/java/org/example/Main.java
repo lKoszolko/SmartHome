@@ -2,6 +2,7 @@ package org.example;
 
 
 import org.example.interfaces.ObslugaFunkcjonalnosciDomu;
+import org.example.managers.AiAssistant;
 import org.example.models.*;
 
 import java.util.List;
@@ -29,12 +30,6 @@ class Main {
         System.out.println("\n");
 
         aiAssistant.printActiveDevices(list);
-
-
-
-
-
-
 
     }
 }
