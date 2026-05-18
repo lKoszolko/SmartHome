@@ -1,30 +1,32 @@
 package org.example.managers;
 
-import org.example.interfaces.Observer;
+import org.example.Observed;
+import org.example.interfaces.IObserver;
 import org.example.interfaces.ObslugaFunkcjonalnosciDomu;
 import org.example.interfaces.Sensors;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AiAssistant implements Observer {
+public class AiAssistant implements IObserver {
     private List<ObslugaFunkcjonalnosciDomu> devices = new ArrayList<>();
     private List<Sensors> sensors = new ArrayList<>();
     private String currentMode;
-//    private SmartHomeManager manager = new SmartHomeManager();
 
     public AiAssistant(List<ObslugaFunkcjonalnosciDomu> devices){
-        this.devices = devices;
-    }
-    public AiAssistant(){
+        this.devices = devices;}
+    public AiAssistant(){}
 
-    }
     public List<ObslugaFunkcjonalnosciDomu> getDevices(){
         return devices;
     }
 
     @Override
     public void reagujNaZdarzenie(String source, String eventType) {
+        System.out.println("AI INFO: Zarejestrowano zdarzenie z [" + source + "]. Typ: " + eventType);
+        if (source.equals("Camera") && eventType.equals("Movement")) {
+            System.out.println("AI AKCJA: Włączam światło i wysyłam powiadomienie do mieszkańca!");
+        }
     }
 
     public void addDevice(ObslugaFunkcjonalnosciDomu device){
@@ -39,7 +41,7 @@ public class AiAssistant implements Observer {
         o.turnOn();
     }
 
-    public void printActiveDevices(List<ObslugaFunkcjonalnosciDomu> list){
-        list.stream().filter(ObslugaFunkcjonalnosciDomu::checkStatus).forEach(System.out::println);
+    public void printActiveDevices(){
+        devices.stream().filter(ObslugaFunkcjonalnosciDomu::checkStatus).forEach(System.out::println);
     }
 }

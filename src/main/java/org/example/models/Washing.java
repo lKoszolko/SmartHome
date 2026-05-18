@@ -1,11 +1,12 @@
 package org.example.models;
 
 
+import org.example.Observed;
 import org.example.interfaces.ObslugaFunkcjonalnosciDomu;
 
-public class Washing implements ObslugaFunkcjonalnosciDomu {
+public class Washing extends Observed implements ObslugaFunkcjonalnosciDomu{
     boolean isActive = false;
-    boolean isFinished;
+    boolean isFinished = false;
 
     @Override
     public void turnOn() {
@@ -29,4 +30,10 @@ public class Washing implements ObslugaFunkcjonalnosciDomu {
                 ", isFinished=" + isFinished +
                 '}';
     }
+
+   public void isWashingFinished(){
+        if (isFinished){
+            notifyObservers(Washing.class.toString(), "Pranie skonczone");
+        }
+   }
 }

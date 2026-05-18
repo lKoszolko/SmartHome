@@ -1,15 +1,12 @@
 package org.example.models;
 
-import org.example.interfaces.Observer;
+import org.example.Observed;
 import org.example.interfaces.ObslugaFunkcjonalnosciDomu;
 
-import java.util.ArrayList;
-import java.util.List;
 
-public class Heating implements ObslugaFunkcjonalnosciDomu {
+public class Heating extends Observed implements ObslugaFunkcjonalnosciDomu{
     private boolean isActive;
     private float temperature;
-    List<Observer> observers = new ArrayList<>();
 
     public void setTemperature(float temperature) {
         this.temperature = temperature;
@@ -37,4 +34,12 @@ public class Heating implements ObslugaFunkcjonalnosciDomu {
                 ", temperature=" + temperature +
                 '}';
     }
+
+    public void temperatureDetection(){
+        if (temperature < 15){
+            notifyObservers(Heating.class.toString(), "Niska temperatura");
+        }
+    }
+
+
 }

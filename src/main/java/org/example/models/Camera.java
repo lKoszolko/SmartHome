@@ -1,15 +1,11 @@
 package org.example.models;
 
 
-import org.example.interfaces.Observer;
+import org.example.Observed;
 import org.example.interfaces.ObslugaFunkcjonalnosciDomu;
 
-import java.util.ArrayList;
-import java.util.List;
 
-public class Camera implements ObslugaFunkcjonalnosciDomu {
-
-    List<Observer> observer = new ArrayList<>();
+public class Camera extends Observed implements ObslugaFunkcjonalnosciDomu {
     boolean isActive;
 
     @Override
@@ -26,9 +22,9 @@ public class Camera implements ObslugaFunkcjonalnosciDomu {
     public boolean checkStatus() {
         return isActive;
     }
-
-    public void addobservator(Observer observer){
-
+    public void motionDetection() {
+        System.out.println("*Kamera klika i nagrywa*");
+        notifyObservers(Camera.class.toString(), "Ruch");
     }
 
     @Override

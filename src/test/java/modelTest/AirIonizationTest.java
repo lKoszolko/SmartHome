@@ -1,3 +1,5 @@
+package modelTest;
+
 import org.example.models.AirIonization;
 import org.junit.jupiter.api.Test;
 

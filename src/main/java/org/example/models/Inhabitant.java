@@ -1,13 +1,15 @@
 package org.example.models;
 
+import java.util.UUID;
+
 public class Inhabitant {
     private final boolean isAtHome;
     private final String id;
     private final int pin;
 
-    public Inhabitant(boolean isAtHome, String id, int pin){
+    public Inhabitant(boolean isAtHome, int pin){
         this.isAtHome = isAtHome;
-        this.id = id;
+        this.id = UUID.randomUUID().toString();
         this.pin = pin;
     }
 
