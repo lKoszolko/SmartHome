@@ -8,9 +8,8 @@ import java.util.List;
 public abstract class Observed {
     protected List<IObserver> iObserverList = new ArrayList<>();
 
-    public void addObserver(IObserver o){
-        System.out.println("dodawanie do listy");
-        if (!iObserverList.contains(o)){
+    public void addObserver(IObserver o) {
+        if (!iObserverList.contains(o)) {
             iObserverList.add(o);
         }
     }
@@ -19,14 +18,9 @@ public abstract class Observed {
         iObserverList.remove(o);
     }
 
-    public void notifyObservers(String source, String eventType){
-        System.out.println(iObserverList.size());
-        if (!iObserverList.isEmpty()){
-            for (IObserver o : iObserverList){
-                o.reagujNaZdarzenie(source, eventType);
-            }
+    public void notifyObservers(String source, String eventType) {
+        for (IObserver o : iObserverList) {
+            o.reagujNaZdarzenie(source, eventType);
         }
-
     }
-
 }

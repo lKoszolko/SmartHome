@@ -9,46 +9,55 @@ public class SmartHomeManager {
     private final Inhabitant inhabitant;
     private AiAssistant assistantAi;
 
-    // na potrzeby symulacji obiekt jako pole
-    private final Camera camera = new Camera();
+    private Camera camera;
+    private Heating heating;
+    private Light light;
+    private AirIonization ionization;
+    private SolarPanel solarPanel;
+    private Speakers speakers;
+    private Washing washing;
 
-    public AiAssistant getAssistantAi() {
-        return assistantAi;
-    }
-
-    public SmartHomeManager(Inhabitant inhabitant){
+    public SmartHomeManager(Inhabitant inhabitant) {
         this.inhabitant = inhabitant;
     }
 
-    public void initialize(){
+    public void initialize() {
+        camera    = new Camera();
+        heating   = new Heating();
+        light     = new Light();
+        ionization = new AirIonization();
+        solarPanel = new SolarPanel(0);
+        speakers  = new Speakers();
+        washing   = new Washing();
 
-//        Camera camera = new Camera();
-
-        Heating heating = new Heating();
-        Light light = new Light();
-        AirIonization ionization = new AirIonization();
-        SolarPanel solarPanel = new SolarPanel(0);
-        Speakers speakers = new Speakers();
-        Washing washing = new Washing();
-
-        List<ObslugaFunkcjonalnosciDomu> list = List.of(camera,heating,light,ionization,speakers,washing);
+        List<ObslugaFunkcjonalnosciDomu> list =
+                List.of(camera, heating, light, ionization, speakers, washing);
         assistantAi = new AiAssistant(list);
 
-        //dodanie obserwatora zdarzeń (Asystent obserwuje podmioty)
-        camera.addObserver(this.assistantAi);
-
+        // Rejestracja obserwatora na wszystkich "Observed"
+        camera.addObserver(assistantAi);
+        heating.addObserver(assistantAi);
+        washing.addObserver(assistantAi);
     }
 
-    public void activateEmergency(){
-    }
-
-    public boolean authorize(int pin){
+    public boolean authorize(int pin) {
         return inhabitant.getPin() == pin;
     }
 
-    public void simulateEvent(){
+    public void activateEmergency() { }
+
+    public void simulateEvent() {
         System.out.println("--- (SYMULACJA: Przechodzi listonosz) ---");
         camera.motionDetection();
     }
 
+    // ── Gettery urządzeń ──────────────────────────────────────────────────────
+    public AiAssistant getAssistantAi() { return assistantAi; }
+    public Camera      getCamera()      { return camera;      }
+    public Heating     getHeating()     { return heating;     }
+    public Light       getLight()       { return light;       }
+    public AirIonization getIonization(){ return ionization;  }
+    public SolarPanel  getSolarPanel()  { return solarPanel;  }
+    public Speakers    getSpeakers()    { return speakers;    }
+    public Washing     getWashing()     { return washing;     }
 }
