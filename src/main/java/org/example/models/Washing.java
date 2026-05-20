@@ -11,7 +11,7 @@ public class Washing extends Observed implements ObslugaFunkcjonalnosciDomu {
     @Override public void turnOff() { if (isActive)  isActive = false; }
     @Override public boolean checkStatus() { return isActive; }
 
-    /** setter bez niego pranie sie buguje nie usuwaj**/
+    //setter do prania, bez tego nie zadziala(Death loop)
     public void setFinished(boolean finished) { this.isFinished = finished; }
 
     public void isWashingFinished() {
