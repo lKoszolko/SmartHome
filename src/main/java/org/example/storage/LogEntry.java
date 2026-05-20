@@ -6,7 +6,7 @@ public class LogEntry {
     public final String timestamp;
     public final String source;
     public final String eventType;
-    public final String action;    // może być pusty ("") gdy wpis to samo INFO
+    public final String action;    // może być pusty tylko wpis musi byc info
 
     public LogEntry(String timestamp, String source, String eventType, String action) {
         this.timestamp = timestamp;

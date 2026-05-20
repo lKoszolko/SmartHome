@@ -1,8 +1,10 @@
 package org.example;
 
+import org.example.interfaces.ObslugaFunkcjonalnosciDomu;
 import org.example.managers.AiAssistant;
-import org.example.managers.AiAssistant.DeviceName;
+import org.example.managers.AiAssistantImpl;
 import org.example.managers.SmartHomeManager;
+import org.example.models.*;
 import org.example.storage.LogEntry;
 
 import java.util.List;
@@ -19,13 +21,22 @@ public class ConsoleUI {
     private final SmartHomeManager manager;
     private final Scanner scanner;
 
+    // Referencje do fasady i urzadzen — ustawiane po inicjalizacji systemu
+    private AiAssistant     ai;
+    private Camera          camera;
+    private Heating         heating;
+    private Light           light;
+    private AirIonization   ionization;
+    private SolarPanel      solarPanel;
+    private Speakers        speakers;
+    private Washing         washing;
+
     public ConsoleUI(SmartHomeManager manager) {
         this.manager = manager;
         this.scanner = new Scanner(System.in);
     }
 
-    // ── Start ─────────────────────────────────────────────────────────────────
-
+    //start
     public void start() {
         clearScreen();
         printBanner();
@@ -36,14 +47,24 @@ public class ConsoleUI {
         }
 
         manager.initialize();
+
+        // Pobranie referencji do fasady i urzadzen po inicjalizacji
+        AiAssistantImpl impl = manager.getFacade();
+        ai         = impl;
+        camera     = impl.getCamera();
+        heating    = impl.getHeating();
+        light      = impl.getLight();
+        ionization = impl.getIonization();
+        solarPanel = impl.getSolarPanel();
+        speakers   = impl.getSpeakers();
+        washing    = impl.getWashing();
+
         System.out.println("\n  [OK] Autoryzacja pomyslna. System uruchomiony.\n");
         pause(1000);
 
         mainMenu();
         System.out.println("\n  Do widzenia!\n");
     }
-
-    // ── Logowanie ─────────────────────────────────────────────────────────────
 
     private boolean loginScreen() {
         clearScreen();
@@ -57,8 +78,6 @@ public class ConsoleUI {
             return false;
         }
     }
-
-    // ── Menu główne ───────────────────────────────────────────────────────────
 
     private void mainMenu() {
         boolean running = true;
@@ -90,42 +109,39 @@ public class ConsoleUI {
         }
     }
 
-    // ── Urządzenia ────────────────────────────────────────────────────────────
 
     private void devicesMenu() {
-        AiAssistant ai = manager.getFacade();
         boolean back = false;
         while (!back) {
             clearScreen();
             printBanner();
             System.out.println("  URZADZENIA");
             System.out.println(THIN);
-            printRow(1, "Kamera",             ai.isActive(DeviceName.KAMERA));
-            printRow(2, "Ogrzewanie",         ai.isActive(DeviceName.OGRZEWANIE));
-            printRow(3, "Swiatlo",            ai.isActive(DeviceName.SWIATLO));
-            printRow(4, "Jonizacja powietrza",ai.isActive(DeviceName.JONIZACJA));
-            printRow(5, "Glosniki",           ai.isActive(DeviceName.GLOSNIKI));
-            printRow(6, "Pralka",             ai.isActive(DeviceName.PRALKA));
+            printRow(1, "Kamera",             ai.isActive(camera));
+            printRow(2, "Ogrzewanie",         ai.isActive(heating));
+            printRow(3, "Swiatlo",            ai.isActive(light));
+            printRow(4, "Jonizacja powietrza",ai.isActive(ionization));
+            printRow(5, "Glosniki",           ai.isActive(speakers));
+            printRow(6, "Pralka",             ai.isActive(washing));
             System.out.println(THIN);
             System.out.println("  7. Wróc do menu glownego");
             System.out.println(LINE);
             System.out.print("  Wybierz urzadzenie: ");
 
             switch (readLine()) {
-                case "1" -> manageSimple("Kamera",             DeviceName.KAMERA);
+                case "1" -> manageSimple("Kamera",             camera);
                 case "2" -> manageHeating();
                 case "3" -> manageLight();
-                case "4" -> manageSimple("Jonizacja powietrza",DeviceName.JONIZACJA);
-                case "5" -> manageSimple("Glosniki",           DeviceName.GLOSNIKI);
-                case "6" -> manageSimple("Pralka",             DeviceName.PRALKA);
+                case "4" -> manageSimple("Jonizacja powietrza",ionization);
+                case "5" -> manageSimple("Glosniki",           speakers);
+                case "6" -> manageSimple("Pralka",             washing);
                 case "7" -> back = true;
                 default  -> showError("Nieznana opcja.");
             }
         }
     }
 
-    private void manageSimple(String name, DeviceName device) {
-        AiAssistant ai = manager.getFacade();
+    private void manageSimple(String name, ObslugaFunkcjonalnosciDomu device) {
         while (true) {
             clearScreen();
             System.out.println(LINE);
@@ -136,19 +152,18 @@ public class ConsoleUI {
             System.out.println(LINE);
             System.out.print("  Wybierz: ");
             String c = readLine();
-            if (c.equals("1"))      { toggle(ai, device); }
+            if (c.equals("1"))      { toggle(device); }
             else if (c.equals("2")) { break; }
             else                    { showError("Nieznana opcja."); }
         }
     }
 
     private void manageHeating() {
-        AiAssistant ai = manager.getFacade();
         while (true) {
             clearScreen();
             System.out.println(LINE);
             System.out.printf("  OGRZEWANIE  |  Status: %s  |  Temp: %.1f stopni%n",
-                    status(ai.isActive(DeviceName.OGRZEWANIE)), ai.getTemperature());
+                    status(ai.isActive(heating)), heating.getTemperature());
             System.out.println(THIN);
             System.out.println("  1. Wlacz / Wylacz");
             System.out.println("  2. Ustaw temperature");
@@ -157,12 +172,12 @@ public class ConsoleUI {
             System.out.print("  Wybierz: ");
             String c = readLine();
             if (c.equals("1")) {
-                toggle(ai, DeviceName.OGRZEWANIE);
+                toggle(heating);
             } else if (c.equals("2")) {
                 System.out.print("  Podaj temperature (stopnie): ");
                 try {
                     float t = Float.parseFloat(readLine());
-                    ai.setTemperature(t);
+                    heating.setTemperature(t);
                     System.out.println("  [OK] Temperatura ustawiona: " + t);
                     pause(800);
                 } catch (NumberFormatException e) { showError("Podaj liczbe."); }
@@ -175,12 +190,11 @@ public class ConsoleUI {
     }
 
     private void manageLight() {
-        AiAssistant ai = manager.getFacade();
         while (true) {
             clearScreen();
             System.out.println(LINE);
             System.out.printf("  SWIATLO  |  Status: %s  |  Jasnosc: %d%%%n",
-                    status(ai.isActive(DeviceName.SWIATLO)), ai.getBrightness());
+                    status(ai.isActive(light)), light.getBrightnessLevel());
             System.out.println(THIN);
             System.out.println("  1. Wlacz / Wylacz");
             System.out.println("  2. Ustaw poziom jasnosci (0-100)");
@@ -189,13 +203,13 @@ public class ConsoleUI {
             System.out.print("  Wybierz: ");
             String c = readLine();
             if (c.equals("1")) {
-                toggle(ai, DeviceName.SWIATLO);
+                toggle(light);
             } else if (c.equals("2")) {
                 System.out.print("  Poziom jasnosci (0-100): ");
                 try {
                     int lvl = Integer.parseInt(readLine());
                     if (lvl < 0 || lvl > 100) { showError("Podaj wartosc 0-100."); }
-                    else { ai.setBrightness(lvl); System.out.println("  [OK] Jasnosc: " + lvl + "%"); pause(800); }
+                    else { light.changeLevel(lvl); System.out.println("  [OK] Jasnosc: " + lvl + "%"); pause(800); }
                 } catch (NumberFormatException e) { showError("Podaj liczbe calkowita."); }
             } else if (c.equals("3")) {
                 break;
@@ -205,16 +219,13 @@ public class ConsoleUI {
         }
     }
 
-    // ── Sensory ───────────────────────────────────────────────────────────────
-
     private void sensorsMenu() {
-        AiAssistant ai = manager.getFacade();
         clearScreen();
         printBanner();
         System.out.println("  ODCZYT SENSOROW");
         System.out.println(THIN);
-        System.out.printf("  [SOLAR] Panel sloneczny     :  %.2f kWh%n", ai.readSolarEnergy());
-        System.out.printf("  [AIR]   Jonizacja powietrza :  %.2f (jednostki)%n", ai.readIonization());
+        System.out.printf("  [SOLAR] Panel sloneczny     :  %.2f kWh%n",        solarPanel.readValue());
+        System.out.printf("  [AIR]   Jonizacja powietrza :  %.2f (jednostki)%n", ionization.readValue());
         System.out.println(THIN);
         System.out.println("  1. Ustaw energie panelu slonecznego");
         System.out.println("  2. Wróc");
@@ -224,17 +235,15 @@ public class ConsoleUI {
             System.out.print("  Podaj wartosc energii (kWh): ");
             try {
                 float val = Float.parseFloat(readLine());
-                ai.setSolarEnergy(val);
+                solarPanel.setEnergy(val);
                 System.out.println("  [OK] Energia panelu ustawiona: " + val + " kWh");
                 pause(800);
             } catch (NumberFormatException e) { showError("Podaj liczbe."); }
         }
     }
 
-    // ── Symulacja ─────────────────────────────────────────────────────────────
-
+    //!!!SYMULACJE!!!
     private void simulateMenu() {
-        AiAssistant ai = manager.getFacade();
         boolean back = false;
         while (!back) {
             clearScreen();
@@ -279,14 +288,13 @@ public class ConsoleUI {
         }
     }
 
-    // ── Log sesji ─────────────────────────────────────────────────────────────
-
+    //logi
     private void sessionLogMenu() {
         clearScreen();
         printBanner();
         System.out.println("  LOG AI — BIEZACA SESJA");
         System.out.println(THIN);
-        List<String> log = manager.getFacade().getSessionLog();
+        List<String> log = ai.getSessionLog();
         if (log.isEmpty()) {
             System.out.println("  (brak zdarzen — najpierw zasymuluj cos)");
         } else {
@@ -297,8 +305,7 @@ public class ConsoleUI {
         scanner.nextLine();
     }
 
-    // ── Historia z JSON ───────────────────────────────────────────────────────
-
+    //Json
     private void historyLogMenu() {
         boolean back = false;
         while (!back) {
@@ -306,7 +313,7 @@ public class ConsoleUI {
             printBanner();
             System.out.println("  HISTORIA LOGOW (plik JSON)");
             System.out.println(THIN);
-            List<LogEntry> history = manager.getFacade().getFullLog();
+            List<LogEntry> history = ai.getFullLog();
             if (history.isEmpty()) {
                 System.out.println("  (brak zapisanych zdarzen)");
             } else {
@@ -325,7 +332,7 @@ public class ConsoleUI {
             System.out.print("  Wybierz: ");
             String c = readLine();
             if (c.equals("1")) {
-                manager.getFacade().clearLog();
+                ai.clearLog();
                 System.out.println("  [OK] Historia wyczyszczona.");
                 pause(800);
             } else if (c.equals("2")) {
@@ -336,8 +343,7 @@ public class ConsoleUI {
         }
     }
 
-    // ── Tryb awaryjny ─────────────────────────────────────────────────────────
-
+    //trybawaryjny(Wszystkof)
     private void emergencyMode() {
         clearScreen();
         printBanner();
@@ -353,11 +359,9 @@ public class ConsoleUI {
         }
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
-
-    private void toggle(AiAssistant ai, DeviceName d) {
-        if (ai.isActive(d)) { ai.turnOff(d); System.out.println("  [OK] Urzadzenie wylaczone."); }
-        else                { ai.turnOn(d);  System.out.println("  [OK] Urzadzenie wlaczone.");  }
+    private void toggle(ObslugaFunkcjonalnosciDomu device) {
+        if (ai.isActive(device)) { ai.turnOff(device); System.out.println("  [OK] Urzadzenie wylaczone."); }
+        else                     { ai.turnOn(device);  System.out.println("  [OK] Urzadzenie wlaczone.");  }
         pause(700);
     }
 

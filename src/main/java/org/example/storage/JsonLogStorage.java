@@ -15,8 +15,7 @@ public class JsonLogStorage {
         this.filePath = filePath;
     }
 
-    // ── Zapis ─────────────────────────────────────────────────────────────────
-
+    //zapis
     public void append(LogEntry entry) {
         List<LogEntry> all = load();
         all.add(entry);
@@ -45,8 +44,7 @@ public class JsonLogStorage {
         }
     }
 
-    // ── Odczyt ────────────────────────────────────────────────────────────────
-
+    //odczyt
     public List<LogEntry> load() {
         List<LogEntry> result = new ArrayList<>();
         File f = new File(filePath);
@@ -69,9 +67,7 @@ public class JsonLogStorage {
         }
     }
 
-    // ── Parser ────────────────────────────────────────────────────────────────
-
-
+    //parser do jsona(Logi)
     private void parseJson(String content, List<LogEntry> out) {
         // Każdy obiekt to blok { ... }
         int i = 0;
@@ -103,8 +99,7 @@ public class JsonLogStorage {
         return unescape(obj.substring(start, end));
     }
 
-    // ── Pomocnicze ────────────────────────────────────────────────────────────
-
+    //funckje pomocnicze
     private String escape(String s) {
         return s.replace("\\", "\\\\")
                 .replace("\"", "\\\"")

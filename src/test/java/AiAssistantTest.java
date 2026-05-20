@@ -1,5 +1,4 @@
-import org.example.managers.AiAssistant;
-import org.example.managers.AiAssistant.DeviceName;
+import org.example.managers.AiAssistantImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,24 +14,25 @@ public class AiAssistantTest {
     void cleanup() {
         new File(TEST_LOG).delete();
     }
+
     @Test
     public void checkAddition_element_notNullList() {
-        AiAssistant assistant = new AiAssistant(TEST_LOG);
-        assertFalse(assistant.isActive(DeviceName.JONIZACJA));
+        AiAssistantImpl assistant = new AiAssistantImpl(TEST_LOG);
+        assertFalse(assistant.isActive(assistant.getIonization()));
     }
 
     @Test
     public void shouldTurnOffDevice() {
-        AiAssistant assistant = new AiAssistant(TEST_LOG);
-        assistant.turnOn(DeviceName.JONIZACJA);
-        assistant.turnOff(DeviceName.JONIZACJA);
-        assertFalse(assistant.isActive(DeviceName.JONIZACJA));
+        AiAssistantImpl assistant = new AiAssistantImpl(TEST_LOG);
+        assistant.turnOn(assistant.getIonization());
+        assistant.turnOff(assistant.getIonization());
+        assertFalse(assistant.isActive(assistant.getIonization()));
     }
 
     @Test
     public void shouldTurnOnDevice() {
-        AiAssistant assistant = new AiAssistant(TEST_LOG);
-        assistant.turnOn(DeviceName.JONIZACJA);
-        assertTrue(assistant.isActive(DeviceName.JONIZACJA));
+        AiAssistantImpl assistant = new AiAssistantImpl(TEST_LOG);
+        assistant.turnOn(assistant.getIonization());
+        assertTrue(assistant.isActive(assistant.getIonization()));
     }
 }
