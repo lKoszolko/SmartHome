@@ -7,12 +7,7 @@ import java.io.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Testy konsolowego UI systemu SmartHome.
- *
- * Technika: zamieniamy System.in na ByteArrayInputStream (symulacja wpisów),
- * a System.out na ByteArrayOutputStream (przechwycenie wydruku).
- */
+
 public class ConsoleUITest {
 
     private static final int    CORRECT_PIN = 1234;
@@ -37,7 +32,6 @@ public class ConsoleUITest {
 
     // ── Helpers ───────────────────────────────────────────────────────────────
 
-    /** Buduje ConsolUI z podanym ciągiem wejściowym (linie oddzielone \n). */
     private ConsoleUI buildUI(String input) {
         System.setIn(new ByteArrayInputStream(input.getBytes()));
         SmartHomeManager manager = new SmartHomeManager(new Inhabitant(true, CORRECT_PIN));

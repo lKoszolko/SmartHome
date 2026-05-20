@@ -1,33 +1,38 @@
 import org.example.managers.AiAssistant;
-import org.example.models.AirIonization;
+import org.example.managers.AiAssistant.DeviceName;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AiAssistantTest {
+
+    private static final String TEST_LOG = "test_logs.json";
+
+    @AfterEach
+    void cleanup() {
+        new File(TEST_LOG).delete();
+    }
     @Test
-    public void checkAddition_element_notNullList(){
-        AirIonization ionization = new AirIonization();
-        AiAssistant assistant = new AiAssistant();
-        assistant.addDevice(ionization);
-        assertTrue(assistant.getDevices().contains(ionization));
+    public void checkAddition_element_notNullList() {
+        AiAssistant assistant = new AiAssistant(TEST_LOG);
+        assertFalse(assistant.isActive(DeviceName.JONIZACJA));
     }
 
     @Test
-    public void shouldTurnOffDevice(){
-        AirIonization airIonization = new AirIonization();
-        AiAssistant assistant = new AiAssistant();
-        airIonization.turnOn();
-        assistant.turnOffDevice(airIonization);
-        assertFalse(airIonization.checkStatus());
+    public void shouldTurnOffDevice() {
+        AiAssistant assistant = new AiAssistant(TEST_LOG);
+        assistant.turnOn(DeviceName.JONIZACJA);
+        assistant.turnOff(DeviceName.JONIZACJA);
+        assertFalse(assistant.isActive(DeviceName.JONIZACJA));
     }
 
     @Test
-    public void shouldTurnOnDevice(){
-        AirIonization airIonization = new AirIonization();
-        AiAssistant assistant = new AiAssistant();
-        assistant.turnOnDevice(airIonization);
-        assertTrue(airIonization.checkStatus());
+    public void shouldTurnOnDevice() {
+        AiAssistant assistant = new AiAssistant(TEST_LOG);
+        assistant.turnOn(DeviceName.JONIZACJA);
+        assertTrue(assistant.isActive(DeviceName.JONIZACJA));
     }
-
 }
