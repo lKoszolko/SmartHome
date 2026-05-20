@@ -9,17 +9,17 @@ public class AirIonization implements ObslugaFunkcjonalnosciDomu, Sensors {
 
 
     @Override
-    public void turnOn() {
+    public void turnOn(){
         if (!isActive) isActive = true;
     }
 
     @Override
-    public void turnOff() {
+    public void turnOff(){
         if (isActive) isActive = false;
     }
 
     @Override
-    public boolean checkStatus() {
+    public boolean checkStatus(){
         return isActive;
     }
 

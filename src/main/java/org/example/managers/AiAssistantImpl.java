@@ -16,13 +16,13 @@ import java.util.Map;
 public final class AiAssistantImpl implements AiAssistant, IObserver {
 
     //Podsystemy
-    private final Camera        camera;
-    private final Heating       heating;
-    private final Light         light;
+    private final Camera camera;
+    private final Heating heating;
+    private final Light light;
     private final AirIonization ionization;
-    private final SolarPanel    solarPanel;
-    private final Speakers      speakers;
-    private final Washing       washing;
+    private final SolarPanel solarPanel;
+    private final Speakers speakers;
+    private final Washing washing;
 
     private final List<String> sessionLog = new ArrayList<>();   // log bieżącej sesji
     private final JsonLogStorage storage;
@@ -44,13 +44,13 @@ public final class AiAssistantImpl implements AiAssistant, IObserver {
 
     public AiAssistantImpl(String logFilePath) {
         // Tworzenie podsystemów
-        camera     = new Camera();
-        heating    = new Heating();
-        light      = new Light();
+        camera = new Camera();
+        heating = new Heating();
+        light = new Light();
         ionization = new AirIonization();
         solarPanel = new SolarPanel(0);
-        speakers   = new Speakers();
-        washing    = new Washing();
+        speakers = new Speakers();
+        washing = new Washing();
 
         storage = new JsonLogStorage(logFilePath);
 
@@ -71,13 +71,13 @@ public final class AiAssistantImpl implements AiAssistant, IObserver {
     public boolean isActive(ObslugaFunkcjonalnosciDomu device) { return device.checkStatus(); }
 
     //Dostep do urzadzen
-    public Camera        getCamera()     { return camera;     }
-    public Heating       getHeating()    { return heating;    }
-    public Light         getLight()      { return light;      }
-    public AirIonization getIonization() { return ionization; }
-    public SolarPanel    getSolarPanel() { return solarPanel; }
-    public Speakers      getSpeakers()   { return speakers;   }
-    public Washing       getWashing()    { return washing;    }
+    public Camera getCamera(){ return camera;}
+    public Heating getHeating(){ return heating;}
+    public Light getLight(){ return light;}
+    public AirIonization getIonization(){ return ionization;}
+    public SolarPanel getSolarPanel(){ return solarPanel;}
+    public Speakers getSpeakers(){ return speakers;}
+    public Washing getWashing(){ return washing;}
 
     //Lista urzadzen sterowalnych — uzywana np. w trybie awaryjnym
     public List<ObslugaFunkcjonalnosciDomu> getAllDevices() {
@@ -107,18 +107,18 @@ public final class AiAssistantImpl implements AiAssistant, IObserver {
 
     //logi
     @Override
-    public List<String> getSessionLog() { return sessionLog; }
+    public List<String> getSessionLog(){ return sessionLog;}
 
     @Override
-    public List<LogEntry> getFullLog() { return storage.load(); }
+    public List<LogEntry> getFullLog(){return storage.load();}
 
     @Override
-    public void clearLog() { storage.clear(); }
+    public void clearLog(){ storage.clear(); }
 
     //wywolane observer
     @Override
     public void reagujNaZdarzenie(String source, String eventType) {
-        String time     = LocalTime.now().format(TIME_FMT);
+        String time = LocalTime.now().format(TIME_FMT);
         String friendly = DEVICE_NAMES.getOrDefault(source, source);
 
         // Wpis INFO

@@ -26,11 +26,11 @@ public class JsonLogStorage {
         StringBuilder sb = new StringBuilder("[\n");
         for (int i = 0; i < entries.size(); i++) {
             LogEntry e = entries.get(i);
-            sb.append("  {\n");
-            sb.append("    \"timestamp\": \"").append(escape(e.timestamp)).append("\",\n");
-            sb.append("    \"source\": \"").append(escape(e.source)).append("\",\n");
-            sb.append("    \"eventType\": \"").append(escape(e.eventType)).append("\",\n");
-            sb.append("    \"action\": \"").append(escape(e.action)).append("\"\n");
+            sb.append("{\n");
+            sb.append("\"timestamp\": \"").append(escape(e.timestamp)).append("\",\n");
+            sb.append("\"source\": \"").append(escape(e.source)).append("\",\n");
+            sb.append("\"eventType\": \"").append(escape(e.eventType)).append("\",\n");
+            sb.append("\"action\": \"").append(escape(e.action)).append("\"\n");
             sb.append("  }");
             if (i < entries.size() - 1) sb.append(",");
             sb.append("\n");

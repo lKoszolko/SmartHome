@@ -7,12 +7,14 @@ public class Washing extends Observed implements ObslugaFunkcjonalnosciDomu {
     boolean isActive = false;
     boolean isFinished = false;
 
-    @Override public void turnOn()  { if (!isActive) isActive = true;  }
-    @Override public void turnOff() { if (isActive)  isActive = false; }
-    @Override public boolean checkStatus() { return isActive; }
+    @Override public void turnOn(){if (!isActive) isActive = true;}
+    @Override public void turnOff(){if (isActive)  isActive = false;}
+    @Override public boolean checkStatus(){ return isActive;}
 
     //setter do prania, bez tego nie zadziala(Death loop)
-    public void setFinished(boolean finished) { this.isFinished = finished; }
+    public void setFinished(boolean finished){
+        this.isFinished = finished;
+    }
 
     public void isWashingFinished() {
         if (isFinished) {

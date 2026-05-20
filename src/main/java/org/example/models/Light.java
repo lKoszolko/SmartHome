@@ -6,7 +6,7 @@ public class Light implements ObslugaFunkcjonalnosciDomu {
     boolean isActive = false;
     int brightnessLevel = 0;
 
-    public int getBrightnessLevel() { return brightnessLevel; }
+    public int getBrightnessLevel(){return brightnessLevel; }
 
     public void changeLevel(int level) {
         if (isActive) {
@@ -16,9 +16,9 @@ public class Light implements ObslugaFunkcjonalnosciDomu {
         }
     }
 
-    @Override public void turnOn()  { if (!isActive) isActive = true;  }
-    @Override public void turnOff() { if (isActive)  isActive = false; }
-    @Override public boolean checkStatus() { return isActive; }
+    @Override public void turnOn(){ if (!isActive) isActive = true;  }
+    @Override public void turnOff(){ if (isActive)  isActive = false; }
+    @Override public boolean checkStatus(){ return isActive; }
 
     @Override
     public String toString() {

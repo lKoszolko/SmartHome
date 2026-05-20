@@ -10,9 +10,9 @@ public class LogEntry {
 
     public LogEntry(String timestamp, String source, String eventType, String action) {
         this.timestamp = timestamp;
-        this.source    = source;
+        this.source = source;
         this.eventType = eventType;
-        this.action    = action == null ? "" : action;
+        this.action = action == null ? "" : action;
     }
 
     @Override
